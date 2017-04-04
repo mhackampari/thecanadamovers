@@ -179,7 +179,7 @@ img, .embed-responsive {
   margin-bottom: 30px;
   }
 
-@media (min-width: 992px) {
+@media (min-width: 384px) {
    .equal{  
         display: -webkit-box;
         display: -moz-box;
