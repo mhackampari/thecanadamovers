@@ -141,7 +141,7 @@ footer {
     overflow: hidden;
 }
 .carousel-inner {
-    min-height: 300px;
+    min-height: 100px;
 }
 .item blockquote {
     border-left: none;
