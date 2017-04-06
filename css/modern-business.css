@@ -191,7 +191,7 @@ img, .embed-responsive {
 }
 
 .panel {
-    width: 100%;
+    width: 90%;
     height: 100%;
 }
 
@@ -208,7 +208,7 @@ img, .embed-responsive {
 }
 
 .services-table .panel-body {
-    margin-bottom: 20px;
+    margin-bottom: 35px;
 }
 
 .gallery-button {
