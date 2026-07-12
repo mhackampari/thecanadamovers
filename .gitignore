@@ -1,0 +1,28 @@
+# CDK
+cdk/node_modules/
+cdk/cdk.out/
+cdk/*.js
+cdk/*.d.ts
+!cdk/jest.config.js
+template.yaml
+
+# Python
+lambda/__pycache__/
+lambda/*.pyc
+lambda/.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Secrets (never commit)
+.env
+.env.*
+secrets.*

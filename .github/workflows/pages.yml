@@ -1,0 +1,32 @@
+name: Deploy Preview to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Inject API endpoint
+        run: |
+          cat > frontend/js/config.js << 'EOF'
+          window.CONFIG = {
+            API_ENDPOINT: "${{ vars.API_ENDPOINT }}",
+            ENV: "preview"
+          };
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./frontend
