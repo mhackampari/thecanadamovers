@@ -168,82 +168,68 @@ button { cursor: pointer; font-family: var(--font); border: none; background: no
    SITE NAV
    ========================================= */
 
-/* Mobile-first: nav is a positioned dropdown, hidden by default */
-.site-nav {
-  display: none;
-  position: absolute;
-  top: 64px;
-  left: 0;
-  right: 0;
-  background: var(--white);
-  border-bottom: 2px solid var(--gray-border);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-  z-index: 99;
-}
-
-/* Only show dropdown on mobile when toggled */
-@media (max-width: 767px) {
-  .site-nav.is-open { display: block; }
-}
-
-.site-nav__list {
-  display: flex;
-  flex-direction: column;
-  list-style: none;
-  padding: 0.5rem 1rem 1rem;
-  gap: 0.25rem;
-}
-
+/* Shared link styles (apply at all widths) */
 .site-nav__link {
   display: block;
-  padding: 0.7rem 0.75rem;
-  font-size: 1rem;
   font-weight: 600;
   color: var(--charcoal);
   border-radius: var(--radius);
   transition: color var(--transition), background var(--transition);
   white-space: nowrap;
+  text-decoration: none;
 }
-
 .site-nav__link:hover { color: var(--red); background: rgba(213,43,30,0.06); }
-
-.site-nav__link--cta {
-  margin-top: 0.25rem;
-  color: var(--white);
-  background: var(--red);
-  text-align: center;
-}
+.site-nav__link--cta { color: var(--white); background: var(--red); text-align: center; }
 .site-nav__link--cta:hover { background: var(--red-dark); color: var(--white); }
 
-/* Desktop: inline horizontal nav */
+/* ---- Mobile: hidden dropdown ---- */
+@media (max-width: 767px) {
+  .site-nav {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-bottom: 2px solid var(--gray-border);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    z-index: 99;
+  }
+  .site-nav.is-open { display: block; }
+
+  .site-nav__list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0.5rem 1rem 1rem;
+    gap: 0.25rem;
+  }
+
+  .site-nav__link { padding: 0.7rem 0.75rem; font-size: 1rem; }
+  .site-nav__link--cta { margin-top: 0.25rem; }
+}
+
+/* ---- Desktop: inline horizontal row ---- */
 @media (min-width: 768px) {
   .site-nav {
     display: flex;
-    position: static;
-    background: none;
-    border: none;
-    box-shadow: none;
-    z-index: auto;
     flex: 1;
     justify-content: center;
+    align-items: center;
   }
 
   .site-nav__list {
+    display: flex;
     flex-direction: row;
+    list-style: none;
     align-items: center;
-    padding: 0;
     gap: 0.15rem;
+    padding: 0;
+    margin: 0;
   }
 
-  .site-nav__link {
-    font-size: 0.875rem;
-    padding: 0.4rem 0.65rem;
-  }
-
-  .site-nav__link--cta {
-    margin-top: 0;
-    padding: 0.4rem 0.9rem;
-  }
+  .site-nav__link { padding: 0.4rem 0.65rem; font-size: 0.875rem; }
+  .site-nav__link--cta { padding: 0.4rem 0.9rem; }
 }
 
 /* Actions wrapper (hamburger + phone) */
