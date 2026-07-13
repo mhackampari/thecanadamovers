@@ -14,17 +14,12 @@
   let current = 0;
   let autoTimer;
 
-  // Set every slide to the carousel container's pixel width.
-  // This avoids % resolution against the track (which has no explicit width).
-  function setSlideWidths() {
-    const w = carousel.offsetWidth;
-    slides.forEach((s) => { s.style.width = w + "px"; });
-  }
-
+  // translateX percentage resolves against the track's own width.
+  // track has CSS width:100% (= carousel width), so -100% = exactly 1 slide.
+  // This scales automatically on resize — no JS width calculation needed.
   function goTo(index) {
     current = (index + total) % total;
-    // Translate in pixels — no ambiguous % of an unbounded flex container.
-    track.style.transform = `translateX(-${current * carousel.offsetWidth}px)`;
+    track.style.transform = `translateX(-${current * 100}%)`;
     dotsContainer.querySelectorAll(".carousel__dot").forEach((d, i) => {
       d.classList.toggle("carousel__dot--active", i === current);
     });
@@ -56,7 +51,7 @@
     stopAuto(); goTo(current + 1); startAuto();
   });
 
-  // Touch / swipe support
+  // Touch / swipe
   let touchStartX = 0;
   track.addEventListener("touchstart", (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
   track.addEventListener("touchend", (e) => {
@@ -68,18 +63,10 @@
     }
   }, { passive: true });
 
-  // Recompute widths and position on resize (orientation change, window resize)
-  window.addEventListener("resize", () => {
-    setSlideWidths();
-    goTo(current);
-  });
-
   // Pause on hover
   carousel.addEventListener("mouseenter", stopAuto);
   carousel.addEventListener("mouseleave", startAuto);
 
-  // Init
-  setSlideWidths();
   goTo(0);
   startAuto();
 })();
