@@ -375,7 +375,9 @@ button { cursor: pointer; font-family: var(--font); border: none; background: no
   flex-shrink: 0;
   scroll-snap-align: start;
   scroll-snap-stop: always;
-  height: clamp(280px, 54.5vw, 60vh);
+  aspect-ratio: 11 / 6;
+  height: auto;
+  max-height: 70vh;
   position: relative;
   overflow: hidden;
 }
