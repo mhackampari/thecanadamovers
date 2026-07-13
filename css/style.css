@@ -239,17 +239,9 @@ button { cursor: pointer; font-family: var(--font); border: none; background: no
   flex-shrink: 0;
   scroll-snap-align: start;
   scroll-snap-stop: always;
-  height: 280px;
+  height: clamp(280px, 54.5vw, 60vh);
   position: relative;
   overflow: hidden;
-}
-
-@media (min-width: 600px) {
-  .carousel__slide { height: 380px; }
-}
-
-@media (min-width: 1024px) {
-  .carousel__slide { height: 500px; }
 }
 
 .carousel__slide img {
