@@ -148,14 +148,37 @@
   <!-- ===== HEADER ===== -->
   <header class="site-header" id="top">
     <div class="container site-header__inner">
+
       <a href="/" class="logo" aria-label="The Canada Movers — Home">
         <span class="logo__maple" aria-hidden="true">🍁</span>
         <span class="logo__text">The Canada Movers</span>
       </a>
-      <a href="tel:+16478850450" class="btn btn--red btn--call">
-        <span aria-hidden="true">📞</span> 1-647-885-0450
-        <span class="btn__sub">24/7 Support</span>
-      </a>
+
+      <nav class="site-nav" id="siteNav" aria-label="Main navigation">
+        <ul class="site-nav__list">
+          <li><a href="#services" class="site-nav__link">Services</a></li>
+          <li><a href="#reviews" class="site-nav__link">Reviews</a></li>
+          <li><a href="#faq" class="site-nav__link">FAQ</a></li>
+          <li><a href="#about" class="site-nav__link">About Us</a></li>
+          <li><a href="#quote" class="site-nav__link site-nav__link--cta">Get a Quote</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        <button class="nav-toggle" id="navToggle"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                aria-controls="siteNav">
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </button>
+        <a href="tel:+16478850450" class="btn btn--red btn--call">
+          <span aria-hidden="true">📞</span> 1-647-885-0450
+          <span class="btn__sub">24/7 Support</span>
+        </a>
+      </div>
+
     </div>
   </header>
 
@@ -175,9 +198,13 @@
           <a href="tel:+16478850450" class="btn btn--red btn--lg">Call Now</a>
           <a href="#quote" class="btn btn--outline btn--lg">Get a Quote Online</a>
         </div>
-        <p class="hero__trust">
-          ⭐ 5-star rated on Google &amp; HomeStars &nbsp;·&nbsp; Est. 2014 &nbsp;·&nbsp; 10+ years serving Toronto
-        </p>
+        <div class="hero__trust">
+          <span class="hero__trust-badge">⭐ 5-star rated on Google &amp; HomeStars</span>
+          <span class="hero__trust-sep" aria-hidden="true">·</span>
+          <span>Est. 2014</span>
+          <span class="hero__trust-sep" aria-hidden="true">·</span>
+          <span>10+ years serving Toronto</span>
+        </div>
       </div>
     </section>
 
