@@ -168,21 +168,43 @@ button { cursor: pointer; font-family: var(--font); border: none; background: no
    SITE NAV
    ========================================= */
 
-/* Shared link styles (apply at all widths) */
+/* List is ALWAYS a horizontal flex row — this is the base truth */
+.site-nav__list {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0;
+  margin: 0;
+}
+
+/* Link base styles */
 .site-nav__link {
   display: block;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--charcoal);
   border-radius: var(--radius);
   transition: color var(--transition), background var(--transition);
   white-space: nowrap;
-  text-decoration: none;
 }
 .site-nav__link:hover { color: var(--red); background: rgba(213,43,30,0.06); }
-.site-nav__link--cta { color: var(--white); background: var(--red); text-align: center; }
+.site-nav__link--cta { color: var(--white); background: var(--red); padding: 0.4rem 0.9rem; }
 .site-nav__link--cta:hover { background: var(--red-dark); color: var(--white); }
 
-/* ---- Mobile: hidden dropdown ---- */
+/* Desktop: nav sits inline in the header row */
+@media (min-width: 768px) {
+  .site-nav {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+/* Mobile: nav is a hidden full-width dropdown below the header */
 @media (max-width: 767px) {
   .site-nav {
     display: none;
@@ -195,41 +217,19 @@ button { cursor: pointer; font-family: var(--font); border: none; background: no
     box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     z-index: 99;
   }
-  .site-nav.is-open { display: block; }
+  .site-nav.is-open { display: flex; }
 
+  /* Stack links vertically only inside the mobile dropdown */
   .site-nav__list {
-    display: flex;
     flex-direction: column;
-    list-style: none;
-    padding: 0.5rem 1rem 1rem;
+    align-items: stretch;
     gap: 0.25rem;
+    padding: 0.5rem 1rem 1rem;
+    width: 100%;
   }
 
-  .site-nav__link { padding: 0.7rem 0.75rem; font-size: 1rem; }
-  .site-nav__link--cta { margin-top: 0.25rem; }
-}
-
-/* ---- Desktop: inline horizontal row ---- */
-@media (min-width: 768px) {
-  .site-nav {
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .site-nav__list {
-    display: flex;
-    flex-direction: row;
-    list-style: none;
-    align-items: center;
-    gap: 0.15rem;
-    padding: 0;
-    margin: 0;
-  }
-
-  .site-nav__link { padding: 0.4rem 0.65rem; font-size: 0.875rem; }
-  .site-nav__link--cta { padding: 0.4rem 0.9rem; }
+  .site-nav__link { font-size: 1rem; padding: 0.7rem 0.75rem; }
+  .site-nav__link--cta { text-align: center; margin-top: 0.25rem; }
 }
 
 /* Actions wrapper (hamburger + phone) */
