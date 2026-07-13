@@ -229,13 +229,14 @@ button { cursor: pointer; font-family: var(--font); border: none; background: no
 .carousel__track {
   display: flex;
   transition: transform 0.4s ease;
+  will-change: transform;
 }
 
 .carousel__slide {
-  min-width: 100%;
+  flex: none;          /* JS sets explicit px width — no % ambiguity */
   height: 280px;
-  flex-shrink: 0;
   position: relative;
+  overflow: hidden;
 }
 
 @media (min-width: 600px) {

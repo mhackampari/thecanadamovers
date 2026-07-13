@@ -8,10 +8,27 @@
   const dotsContainer = document.getElementById("carouselDots");
   if (!track) return;
 
-  const slides = track.querySelectorAll(".carousel__slide");
+  const carousel = track.closest(".carousel");
+  const slides = Array.from(track.querySelectorAll(".carousel__slide"));
   const total = slides.length;
   let current = 0;
   let autoTimer;
+
+  // Set every slide to the carousel container's pixel width.
+  // This avoids % resolution against the track (which has no explicit width).
+  function setSlideWidths() {
+    const w = carousel.offsetWidth;
+    slides.forEach((s) => { s.style.width = w + "px"; });
+  }
+
+  function goTo(index) {
+    current = (index + total) % total;
+    // Translate in pixels — no ambiguous % of an unbounded flex container.
+    track.style.transform = `translateX(-${current * carousel.offsetWidth}px)`;
+    dotsContainer.querySelectorAll(".carousel__dot").forEach((d, i) => {
+      d.classList.toggle("carousel__dot--active", i === current);
+    });
+  }
 
   // Build dots
   slides.forEach((_, i) => {
@@ -19,17 +36,9 @@
     dot.className = "carousel__dot" + (i === 0 ? " carousel__dot--active" : "");
     dot.setAttribute("role", "tab");
     dot.setAttribute("aria-label", `Photo ${i + 1}`);
-    dot.addEventListener("click", () => goTo(i));
+    dot.addEventListener("click", () => { stopAuto(); goTo(i); startAuto(); });
     dotsContainer.appendChild(dot);
   });
-
-  function goTo(index) {
-    current = (index + total) % total;
-    track.style.transform = `translateX(-${current * 100}%)`;
-    dotsContainer.querySelectorAll(".carousel__dot").forEach((d, i) => {
-      d.classList.toggle("carousel__dot--active", i === current);
-    });
-  }
 
   function startAuto() {
     autoTimer = setInterval(() => goTo(current + 1), 4500);
@@ -59,10 +68,19 @@
     }
   }, { passive: true });
 
-  // Pause on hover
-  track.closest(".carousel").addEventListener("mouseenter", stopAuto);
-  track.closest(".carousel").addEventListener("mouseleave", startAuto);
+  // Recompute widths and position on resize (orientation change, window resize)
+  window.addEventListener("resize", () => {
+    setSlideWidths();
+    goTo(current);
+  });
 
+  // Pause on hover
+  carousel.addEventListener("mouseenter", stopAuto);
+  carousel.addEventListener("mouseleave", startAuto);
+
+  // Init
+  setSlideWidths();
+  goTo(0);
   startAuto();
 })();
 
