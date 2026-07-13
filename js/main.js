@@ -4,25 +4,28 @@
 // CAROUSEL
 // =========================================
 (function initCarousel() {
-  const track = document.getElementById("carouselTrack");
+  const carousel = document.querySelector(".carousel");
   const dotsContainer = document.getElementById("carouselDots");
-  if (!track) return;
+  if (!carousel) return;
 
-  const carousel = track.closest(".carousel");
-  const slides = Array.from(track.querySelectorAll(".carousel__slide"));
+  const slides = Array.from(carousel.querySelectorAll(".carousel__slide"));
   const total = slides.length;
   let current = 0;
   let autoTimer;
+  let scrollEndTimer;
 
-  // translateX percentage resolves against the track's own width.
-  // track has CSS width:100% (= carousel width), so -100% = exactly 1 slide.
-  // This scales automatically on resize — no JS width calculation needed.
+  function updateDots(index) {
+    dotsContainer.querySelectorAll(".carousel__dot").forEach((d, i) => {
+      d.classList.toggle("carousel__dot--active", i === index);
+    });
+  }
+
+  // scrollTo is pixel-exact against the scroll port — no % ambiguity, works
+  // identically on iPhone 12 Pro, large curved displays, any viewport.
   function goTo(index) {
     current = (index + total) % total;
-    track.style.transform = `translateX(-${current * 100}%)`;
-    dotsContainer.querySelectorAll(".carousel__dot").forEach((d, i) => {
-      d.classList.toggle("carousel__dot--active", i === current);
-    });
+    carousel.scrollTo({ left: current * carousel.offsetWidth, behavior: "smooth" });
+    updateDots(current);
   }
 
   // Build dots
@@ -36,12 +39,11 @@
   });
 
   function startAuto() {
+    clearInterval(autoTimer);
     autoTimer = setInterval(() => goTo(current + 1), 4500);
   }
 
-  function stopAuto() {
-    clearInterval(autoTimer);
-  }
+  function stopAuto() { clearInterval(autoTimer); }
 
   document.querySelector(".carousel__btn--prev")?.addEventListener("click", () => {
     stopAuto(); goTo(current - 1); startAuto();
@@ -51,23 +53,22 @@
     stopAuto(); goTo(current + 1); startAuto();
   });
 
-  // Touch / swipe
-  let touchStartX = 0;
-  track.addEventListener("touchstart", (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
-  track.addEventListener("touchend", (e) => {
-    const delta = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(delta) > 40) {
-      stopAuto();
-      goTo(delta > 0 ? current + 1 : current - 1);
-      startAuto();
-    }
+  // Sync dot state after native swipe settles (scroll-snap handles the snap)
+  carousel.addEventListener("scroll", () => {
+    clearTimeout(scrollEndTimer);
+    scrollEndTimer = setTimeout(() => {
+      const snapped = Math.round(carousel.scrollLeft / carousel.offsetWidth);
+      if (snapped !== current) { current = snapped; updateDots(current); }
+    }, 80);
   }, { passive: true });
 
-  // Pause on hover
+  // Pause auto while finger is down; resume 1s after lift
+  carousel.addEventListener("touchstart", stopAuto, { passive: true });
+  carousel.addEventListener("touchend", () => setTimeout(startAuto, 1000), { passive: true });
+
   carousel.addEventListener("mouseenter", stopAuto);
   carousel.addEventListener("mouseleave", startAuto);
 
-  goTo(0);
   startAuto();
 })();
 
