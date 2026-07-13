@@ -1,6 +1,35 @@
 /* global window, document, CONFIG */
 
 // =========================================
+// NAV TOGGLE (HAMBURGER)
+// =========================================
+(function initNav() {
+  const toggle = document.getElementById("navToggle");
+  const nav    = document.getElementById("siteNav");
+  if (!toggle || !nav) return;
+
+  function close() {
+    toggle.setAttribute("aria-expanded", "false");
+    nav.classList.remove("is-open");
+  }
+
+  toggle.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!open));
+    nav.classList.toggle("is-open", !open);
+  });
+
+  nav.querySelectorAll(".site-nav__link").forEach(link => {
+    link.addEventListener("click", close);
+  });
+
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".site-header")) close();
+  });
+})();
+
+
+// =========================================
 // CAROUSEL
 // =========================================
 (function initCarousel() {
