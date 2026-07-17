@@ -90,7 +90,7 @@
 * **FR-3.1 [Honeypot Field]:** The HTML form must contain an invisible field (e.g., `middle_name`) hidden with CSS. If filled out, the backend silently drops the submission as bot spam.
 * **FR-3.2 [Cloudflare Turnstile]:** Integration of a zero-cost, invisible Turnstile widget to verify user legitimacy without slowing the page.
 * **FR-3.3 [Backend Input Sanitization]:** Python Lambda function must escape all incoming text to prevent XSS, run strict Regex matching on phone/emails, and enforce maximum length properties on string text.
-* **FR-3.4 [CORS Policy]:** AWS API Gateway must be strictly configured to only accept incoming requests from `https://thecanadamovers.ca` and its subdomains.
+* **FR-3.4 [CORS Policy]:** AWS API Gateway must be strictly configured to only accept incoming requests from `https://the-canada-movers.com` and its subdomains.
 
 ---
 
@@ -116,12 +116,12 @@
 1. **Hosting:** AWS S3 + AWS CloudFront (CDN) for HTTPS secure delivery with zero server maintenance.
 2. **Domain & DNS:** Managed via Route 53 or external registrar, utilizing AWS Certificate Manager (ACM) for free SSL.
 3. **Backend API:** AWS API Gateway routing to a serverless **Python 3.12 Lambda function**.
-4. **Email Notification:** AWS SES with Domain Verification (SPF, DKIM, DMARC DNS settings fully configured on `thecanadamovers.ca` to ensure high deliverability directly to Gmail and Client).
+4. **Email Notification:** AWS SES with Domain Verification (SPF, DKIM, DMARC DNS settings fully configured on `the-canada-movers.com` to ensure high deliverability directly to Gmail and Client).
 
 ---
 
 ## 7. Assumptions & Constraints
-* **Assumption 1:** The client has full access to the domain DNS panel of `thecanadamovers.ca` to configure SES and CloudFront CNAME records.
+* **Assumption 1:** The client has full access to the domain DNS panel of `the-canada-movers.com` to configure SES and CloudFront CNAME records.
 * **Assumption 2:** The client will provide optimized, high-quality images of their vehicles and specialized moves in WebP format.
 * **Constraint 1:** No database storage will be used for Phase 1; SES email delivery is the sole mechanism of lead retrieval, demanding robust email configuration.
 * **Constraint 2:** Page must remain under 3MB total size to maintain a 100/100 Mobile PageSpeed rank.

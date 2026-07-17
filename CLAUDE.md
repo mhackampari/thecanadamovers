@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **The Canada Movers** — a serverless, single-page marketing and lead-capture site for a Toronto-based specialized moving company. Target: $0/month hosting via AWS Free Tier. Target PageSpeed: 100/100 mobile.
 
-**Live domain:** `thecanadamovers.ca`  
+**Live domain:** `the-canada-movers.com`  
 **Contact:** `thecanadamovers@gmail.com` | `1-647-885-0450`  
 **Address:** `301-3 Goldfinch Ct, Toronto ON M2R2C2`
 
@@ -19,7 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 Browser
  ├── GET  → S3 + CloudFront (static HTML/CSS/JS)
- └── POST → API Gateway (CORS: thecanadamovers.ca only)
+ └── POST → API Gateway (CORS: the-canada-movers.com only)
                 └── Lambda (Python 3.12)
                         ├── Honeypot + Turnstile check
                         ├── XSS sanitization + regex validation
@@ -36,7 +36,7 @@ No databases. No servers. All lead data flows through SES email only.
 - **No SQL/RDS/DynamoDB** — out of scope for Phase 1.
 - **No Google Maps API** on the frontend — route data collected as plain text, estimated manually.
 - **Images:** WebP format only, lazy-loaded. Client provides source images.
-- **CORS:** API Gateway must only accept requests from `https://thecanadamovers.ca` and its subdomains.
+- **CORS:** API Gateway must only accept requests from `https://the-canada-movers.com` and its subdomains.
 
 ---
 
@@ -97,8 +97,8 @@ Security pipeline (in order):
 
 - `middle_name` honeypot field — hidden via CSS, never via `display:none` or `visibility:hidden` (bots read those)
 - Cloudflare Turnstile (invisible, zero-cost)
-- API Gateway CORS locked to `thecanadamovers.ca`
-- SES domain: SPF, DKIM, DMARC must be configured on `thecanadamovers.ca`
+- API Gateway CORS locked to `the-canada-movers.com`
+- SES domain: SPF, DKIM, DMARC must be configured on `the-canada-movers.com`
 
 ---
 

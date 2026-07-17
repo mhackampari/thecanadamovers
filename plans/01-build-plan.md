@@ -69,9 +69,9 @@ cd cdk && npm install @aws-cdk/aws-lambda-python-alpha
   "app": "npx ts-node --prefer-ts-exts bin/app.ts",
   "context": {
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
-    "domainName": "thecanadamovers.ca",
+    "domainName": "the-canada-movers.com",
     "recipientEmail": "thecanadamovers@gmail.com",
-    "senderEmail": "noreply@thecanadamovers.ca"
+    "senderEmail": "noreply@the-canada-movers.com"
   }
 }
 ```
@@ -305,7 +305,7 @@ This runs `cdk synth` to generate `template.yaml`, then SAM pulls the Lambda Doc
 ## Phase 2: StaticSiteStack — S3 + CloudFront + ACM
 
 ### Goal
-Private S3 bucket served via CloudFront with OAC and HTTPS on `thecanadamovers.ca`.
+Private S3 bucket served via CloudFront with OAC and HTTPS on `the-canada-movers.com`.
 
 ### Key pattern (from docs)
 ```typescript
@@ -331,12 +331,12 @@ const bucket = new s3.Bucket(this, 'FrontendBucket', {
 });
 
 const hostedZone = route53.HostedZone.fromLookup(this, 'Zone', {
-  domainName: 'thecanadamovers.ca',
+  domainName: 'the-canada-movers.com',
 });
 
 const cert = new acm.Certificate(this, 'Cert', {
-  domainName: 'thecanadamovers.ca',
-  subjectAlternativeNames: ['www.thecanadamovers.ca'],
+  domainName: 'the-canada-movers.com',
+  subjectAlternativeNames: ['www.the-canada-movers.com'],
   validation: acm.CertificateValidation.fromDns(hostedZone),
 });
 
@@ -348,7 +348,7 @@ const distribution = new cloudfront.Distribution(this, 'Distribution', {
   },
   defaultRootObject: 'index.html',
   certificate: cert,
-  domainNames: ['thecanadamovers.ca', 'www.thecanadamovers.ca'],
+  domainNames: ['the-canada-movers.com', 'www.the-canada-movers.com'],
   errorResponses: [
     // SPA fallback — serve index.html for all 403/404
     { httpStatus: 403, responseHttpStatus: 200, responsePagePath: '/index.html' },
@@ -383,7 +383,7 @@ new s3deploy.BucketDeployment(this, 'DeployFrontend', {
 ## Phase 3: EmailStack — SES Domain Identity
 
 ### Goal
-Register `thecanadamovers.ca` as an SES sending identity and output DKIM records.
+Register `the-canada-movers.com` as an SES sending identity and output DKIM records.
 
 ### Key pattern (from docs)
 ```typescript
@@ -392,9 +392,9 @@ import * as ses from 'aws-cdk-lib/aws-ses';
 import { CfnOutput } from 'aws-cdk-lib';
 
 const emailIdentity = new ses.EmailIdentity(this, 'SesIdentity', {
-  identity: ses.Identity.domain('thecanadamovers.ca'),
+  identity: ses.Identity.domain('the-canada-movers.com'),
   dkimSigning: true,
-  mailFromDomain: 'mail.thecanadamovers.ca',
+  mailFromDomain: 'mail.the-canada-movers.com',
   mailFromBehaviorOnMxFailure: ses.MailFromBehaviorOnMxFailure.REJECT_MESSAGE,
 });
 
@@ -413,9 +413,9 @@ new CfnOutput(this, 'DkimValue3', { value: emailIdentity.dkimDnsTokenValue3 });
 | CNAME | `<DkimName1>` | `<DkimValue1>` |
 | CNAME | `<DkimName2>` | `<DkimValue2>` |
 | CNAME | `<DkimName3>` | `<DkimValue3>` |
-| MX | `mail.thecanadamovers.ca` | `feedback-smtp.us-east-1.amazonses.com` (priority 10) |
-| TXT | `mail.thecanadamovers.ca` | `"v=spf1 include:amazonses.com ~all"` |
-| TXT | `thecanadamovers.ca` | `"v=DMARC1; p=quarantine; rua=mailto:thecanadamovers@gmail.com"` |
+| MX | `mail.the-canada-movers.com` | `feedback-smtp.us-east-1.amazonses.com` (priority 10) |
+| TXT | `mail.the-canada-movers.com` | `"v=spf1 include:amazonses.com ~all"` |
+| TXT | `the-canada-movers.com` | `"v=DMARC1; p=quarantine; rua=mailto:thecanadamovers@gmail.com"` |
 
 ### Gotchas
 - New AWS accounts are in SES sandbox — only verified addresses can receive email until production access is requested via AWS Support.
@@ -432,7 +432,7 @@ new CfnOutput(this, 'DkimValue3', { value: emailIdentity.dkimDnsTokenValue3 });
 ## Phase 4: ApiStack — API Gateway v2 + Lambda
 
 ### Goal
-HTTP API with a single `POST /quote` route backed by a Python 3.12 Lambda. CORS locked to `thecanadamovers.ca`.
+HTTP API with a single `POST /quote` route backed by a Python 3.12 Lambda. CORS locked to `the-canada-movers.com`.
 
 ### Key pattern (from docs)
 ```typescript
@@ -452,7 +452,7 @@ const quoteFn = new python.PythonFunction(this, 'QuoteFunction', {
   timeout: Duration.seconds(29),  // API GW max is 29s
   environment: {
     RECIPIENT_EMAIL: 'thecanadamovers@gmail.com',
-    SENDER_EMAIL:    'noreply@thecanadamovers.ca',
+    SENDER_EMAIL:    'noreply@the-canada-movers.com',
     SES_REGION:      'us-east-1',
     TURNSTILE_SECRET_KEY: '{{SET VIA SSM OR ENV}}',  // see gotchas
   },
@@ -463,7 +463,7 @@ emailIdentity.grantSendEmail(quoteFn);
 
 const httpApi = new apigwv2.HttpApi(this, 'QuoteApi', {
   corsPreflight: {
-    allowOrigins: ['https://thecanadamovers.ca', 'https://www.thecanadamovers.ca'],
+    allowOrigins: ['https://the-canada-movers.com', 'https://www.the-canada-movers.com'],
     allowMethods: [apigwv2.CorsHttpMethod.POST, apigwv2.CorsHttpMethod.OPTIONS],
     allowHeaders: ['Content-Type'],
     maxAge: Duration.days(1),
@@ -487,7 +487,7 @@ new CfnOutput(this, 'ApiEndpoint', { value: httpApi.apiEndpoint });
 
 ### Verification
 - `curl -X POST https://<api-id>.execute-api.us-east-1.amazonaws.com/quote -H "Content-Type: application/json" -d '{"test":true}'` returns a response (even an error).
-- CORS preflight `OPTIONS /quote` returns `Access-Control-Allow-Origin: https://thecanadamovers.ca`.
+- CORS preflight `OPTIONS /quote` returns `Access-Control-Allow-Origin: https://the-canada-movers.com`.
 
 ---
 
@@ -761,7 +761,7 @@ cdk deploy --all
 ### DNS records to add in Cloudflare (after deploy)
 | Type | Name | Value | Proxy |
 |---|---|---|---|
-| CNAME | `thecanadamovers.ca` | `<cloudfront-domain>.cloudfront.net` | OFF (DNS only) |
+| CNAME | `the-canada-movers.com` | `<cloudfront-domain>.cloudfront.net` | OFF (DNS only) |
 | CNAME | `www` | `<cloudfront-domain>.cloudfront.net` | OFF |
 | CNAME | `<dkim1>._domainkey` | `<dkim1-value>` | OFF |
 | CNAME | `<dkim2>._domainkey` | `<dkim2-value>` | OFF |
@@ -771,7 +771,7 @@ cdk deploy --all
 | TXT | `@` | `"v=DMARC1; p=quarantine; rua=mailto:thecanadamovers@gmail.com"` | — |
 
 ### SES sandbox exit
-File AWS Support ticket: "Request production SES access for domain thecanadamovers.ca". Required before real users can receive auto-confirm emails.
+File AWS Support ticket: "Request production SES access for domain the-canada-movers.com". Required before real users can receive auto-confirm emails.
 
 ### API endpoint in frontend
 After deploy, set the API Gateway URL in `frontend/js/main.js`:
@@ -781,8 +781,8 @@ const API_ENDPOINT = 'https://<api-id>.execute-api.us-east-1.amazonaws.com/quote
 Or inject it via `BucketDeployment` substitution / a generated `config.js`.
 
 ### Verification
-- `https://thecanadamovers.ca` loads over HTTPS with no cert warnings
-- `https://www.thecanadamovers.ca` redirects correctly
+- `https://the-canada-movers.com` loads over HTTPS with no cert warnings
+- `https://www.the-canada-movers.com` redirects correctly
 - SES identity shows "Verified" in AWS console
 - DMARC/SPF/DKIM pass: check via `mail-tester.com` or `mxtoolbox.com`
 

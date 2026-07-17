@@ -3,6 +3,6 @@
 //   GitHub Pages preview → full API Gateway URL (injected by pages.yml)
 //   production (CloudFront + S3) → full API Gateway URL (injected by cdk deploy)
 window.CONFIG = {
-  API_ENDPOINT: "/quote",
-  ENV: "local",
+  API_ENDPOINT: "https://aezsvi0v4b.execute-api.us-east-2.amazonaws.com/quote",
+  ENV: "production",
 };
