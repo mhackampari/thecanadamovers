@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **The Canada Movers** — a serverless, single-page marketing and lead-capture site for a Toronto-based specialized moving company. Target: $0/month hosting via AWS Free Tier. Target PageSpeed: 100/100 mobile.
 
-**Live domain:** `the-canada-movers.com`  
+**Live domain:** `thecanadamovers.com` (`the-canada-movers.com` redirects here)  
 **Contact:** `thecanadamovers@gmail.com` | `1-647-885-0450`  
 **Address:** `301-3 Goldfinch Ct, Toronto ON M2R2C2`
 
