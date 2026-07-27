@@ -104,7 +104,7 @@ def handler(event, context):
     else:
         services_str = str(services)
 
-    lead_body = f"""New quote request submitted via the-canada-movers.com
+    lead_body = f"""New quote request submitted via thecanadamovers.com
 
 Name:      {body.get('name', '')}
 Email:     {body.get('email', '')}
@@ -159,7 +159,7 @@ The Canada Movers team
           </tr>
           <tr>
             <td style="background-color:#f4f4f4;padding:16px 32px;color:#666666;font-size:12px;">
-              1-647-885-0450 &nbsp;|&nbsp; the-canada-movers.com
+              1-647-885-0450 &nbsp;|&nbsp; thecanadamovers.com
             </td>
           </tr>
         </table>
